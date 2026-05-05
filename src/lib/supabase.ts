@@ -2,8 +2,9 @@ import { createClient } from '@supabase/supabase-js';
 
 // Função para pegar as chaves (env ou localStorage)
 const getKeys = () => {
-  const envUrl = (import.meta as any).env.VITE_SUPABASE_URL || '';
-  const envKey = (import.meta as any).env.VITE_SUPABASE_ANON_KEY || '';
+  // Tentamos ler de várias fontes possíveis para garantir compatibilidade
+  const envUrl = process.env.VITE_SUPABASE_URL || (import.meta as any).env.VITE_SUPABASE_URL || '';
+  const envKey = process.env.VITE_SUPABASE_ANON_KEY || (import.meta as any).env.VITE_SUPABASE_ANON_KEY || '';
   
   const localUrl = localStorage.getItem('supabase_url');
   const localKey = localStorage.getItem('supabase_key');
@@ -17,7 +18,13 @@ const getKeys = () => {
 const { url, key } = getKeys();
 
 const isPlaceholder = (u: string) => {
-  return !u || u.includes('seu-id') || u.includes('your-project-id') || u.includes('placeholder') || u.includes('null');
+  const val = u.toLowerCase();
+  return !u || 
+         val.includes('seu-id') || 
+         val.includes('your-project-id') || 
+         val.includes('placeholder') || 
+         val.includes('null') ||
+         !val.startsWith('http');
 };
 
 // Exportamos uma função para verificar se as chaves são válidas

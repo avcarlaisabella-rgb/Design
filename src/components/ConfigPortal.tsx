@@ -77,6 +77,17 @@ export default function ConfigPortal() {
             <Save className="w-5 h-5" />
             Salvar e Ativar Sistema
           </button>
+
+          <button
+            onClick={() => {
+              localStorage.removeItem('supabase_url');
+              localStorage.removeItem('supabase_key');
+              window.location.reload();
+            }}
+            className="w-full bg-red-50 text-red-600 p-3 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-red-100 transition-all"
+          >
+            Limpar e usar chaves dos Secrets
+          </button>
         </div>
 
         <p className="mt-8 text-center text-[10px] text-gray-400 uppercase tracking-widest leading-loose">
